@@ -3,6 +3,7 @@ package pages;
 import com.codeborne.selenide.SelenideElement;
 import pages.components.CalendarComponent;
 import pages.components.TableResultComponent;
+import java.time.LocalDate;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
@@ -61,10 +62,10 @@ public class RegistrationPage {
         return this;
     }
 
-    public RegistrationPage setDate(String year, String month, String day) {
+    public RegistrationPage setBirthday(LocalDate value) {
         datePicker.click();
         CalendarComponent calendarComponent = new CalendarComponent();
-        calendarComponent.setDate(year, month, day);
+        calendarComponent.setDate(value);
         return this;
     }
 
@@ -107,7 +108,7 @@ public class RegistrationPage {
 
     public RegistrationPage checkTable(String studentName, String studentEmail,
                                        String gender, String mobile,
-                                       String dateOfBirth, String subject,
+                                       LocalDate dateOfBirth, String subject,
                                        String hobbies, String picture,
                                        String address, String stateAndCity) {
         tableResultComponent
@@ -115,7 +116,14 @@ public class RegistrationPage {
                 .checkRow("Student Email", studentEmail)
                 .checkRow("Gender", gender)
                 .checkRow("Mobile", mobile)
-                .checkRow("Date of Birth", dateOfBirth)
+                .checkRow("Date of Birth",
+                        String.format(
+                                "%2d %s,%4d",
+                                dateOfBirth.getDayOfMonth(),
+                                dateOfBirth.getMonth().name(),
+                                dateOfBirth.getYear()
+                        )
+                )
                 .checkRow("Subjects", subject)
                 .checkRow("Hobbies", hobbies)
                 .checkRow("Picture", picture)
